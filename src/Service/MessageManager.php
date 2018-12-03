@@ -57,18 +57,18 @@ class MessageManager
      * @param $messageData
      * @return $this
      */
-    public function setMessageData($messageData)
+    public function setMessageData($messageData) : self
     {
         $this->messageData = $messageData;
         return $this;
     }
 
     /**
-     * Валидирует и отправляет данные в очередь или напрямую получателю
+     * Валидирует данные
      * @param array $data
      * @return array
      */
-    public function validateAndSendMessage(array $data) : array
+    public function validateMessage(array $data) : array
     {
         $status = Response::HTTP_OK;
         $response = ['status' => $status ];
@@ -83,21 +83,32 @@ class MessageManager
             $isValidData = $messageValidation->validate();
             if($isValidData === false) {
                 $errors[] = $messageValidation->getValidationErrors();
-            } else {
-                $isSendNow = $data['send_now'] ?? false;
-                $this
-                    ->setMessageData($messageData)
-                    ->setIsSendNow($isSendNow)
-                    ->sendMessageOrAddToQueue();
             }
         }
 
-
         if(!empty($errors)) {
-            $response['status'] = Response::HTTP_BAD_REQUEST;
+            $response['status'] = Response::HTTP_NOT_ACCEPTABLE;
             $response['errors'] = $errors;
         }
+
         return $response;
+    }
+
+    /**
+     * Отправляет сообщение или добавляет в очередь
+     * @param array $data
+     */
+    public function sendMessage(array $data) : void
+    {
+        foreach($data['users'] as $oneUserData)
+        {
+            $messageDataObject = $this->createMessageObject($oneUserData, $data['message']);
+            $isSendNow = $data['send_now'] ?? false;
+            $this
+                ->setMessageData($messageDataObject)
+                ->setIsSendNow($isSendNow)
+                ->sendMessageOrAddToQueue();
+        }
     }
 
 
@@ -166,6 +177,20 @@ class MessageManager
 
         $queue = new MessageQueue();
         $queue->addToQueue((array)$this->messageData);
+    }
+
+    /**
+     * @param array $userData
+     * @param string $messageText
+     * @return MessageRequestData
+     */
+    private function createMessageObject(array $userData,string $messageText) : MessageRequestData
+    {
+        $messageData = (new MessageRequestData());
+        $messageData->setText($messageText);
+        $messageData->setChatId($userData['chat_id']);
+        $messageData->setMessengerId($userData['messenger_id']);
+        return $messageData;
     }
 
 

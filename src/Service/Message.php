@@ -39,9 +39,9 @@ class Message
 
     /**
      * @param MessageRequestData $messageData
-     * @return $this
+     * @return Message
      */
-    public function setMessageData(MessageRequestData $messageData)
+    public function setMessageData(MessageRequestData $messageData) : self
     {
         $this->messageData = $messageData;
         return $this;
@@ -51,7 +51,7 @@ class Message
      * Сохраняет сообщение в бд
      * @throws \Exception
      */
-    public function saveMessage()
+    public function saveMessage() : void
     {
         try {
             $this->entityManager->persist($this->messageData);
@@ -65,7 +65,7 @@ class Message
      * Проверяет, было ли уже отправлено сообщение
      * @return bool
      */
-    public function checkIsAlreadySendEqualMessage()
+    public function checkIsAlreadySendEqualMessage() : bool
     {
         $repository = $this->entityManager->getRepository(MessageRequestData::class);
         $message = $repository->findOneBy(
@@ -87,7 +87,7 @@ class Message
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function setMessageIsDelivered(array $messageData)
+    public function setMessageIsDelivered(array $messageData) : void
     {
         $repository = $this->entityManager->getRepository(MessageRequestData::class);
         foreach ($messageData as $oneMessage) {

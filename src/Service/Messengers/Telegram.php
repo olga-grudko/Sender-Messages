@@ -34,8 +34,6 @@ class Telegram extends Message implements MessengerInterface
      */
     public function sendMessage() : self
     {
-        //используя $this->messageData отправить сообщение
-        echo 'Отправка сообщения через ' . self::class . PHP_EOL;
         return $this;
     }
 }

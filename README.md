@@ -15,9 +15,9 @@
  	"messenger_id": 1
  	},
  	{
-     "chat_id": 2,
- 		"messenger_id": 2
-     }
+    "chat_id": 2,
+    "messenger_id": 2
+    }
  ],
  "message": "test message1",
 }
@@ -40,7 +40,7 @@
  "send_now": true
 }
 ````
-**Для разбора очереди сообщений** нужно поставить в крон такой метод http://127.0.0.1:8000/parseQueue
+**Для разбора очереди сообщений** нужно поставить в крон комманду app:parse-queue
 
 **Статус доставки сообщения** происходит через вызов callback'a http://127.0.0.1:8000/callBackFromMessenger и отправки туда данных в формате json
 <br/>

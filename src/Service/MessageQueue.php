@@ -30,7 +30,7 @@ class MessageQueue
     /**
      * Добавляет элемент в конец очередь
      * @param array $messageData
-     * @return $this
+     * @return MessageQueue
      */
     public function addToQueue(array $messageData) : self
     {

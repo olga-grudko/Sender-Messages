@@ -11,6 +11,11 @@ namespace App\Redis;
 
 use Predis\Client;
 
+/**
+ * Класс-обертка для работы с редисом
+ * Class Redis
+ * @package App\Redis
+ */
 class Redis
 {
     private $host = '192.168.1.7';
@@ -44,7 +49,7 @@ class Redis
      * Возвращает первый элемент из списка и убирает его из списка
      * @return string
      */
-    public function lPop()
+    public function lPop() : string
     {
         $value =  $this->redis->lpop($this->messageQueueKey);
         return $value;

@@ -21,11 +21,11 @@ use Doctrine\ORM\EntityManager;
  */
 class MessengerFactory
 {
-    public $em;
+    public $entityManager;
 
     public function __construct(EntityManager $em)
     {
-        $this->em = $em;
+        $this->entityManager = $em;
     }
 
     /** Маппинг классов */
@@ -48,7 +48,7 @@ class MessengerFactory
         }
 
         if(class_exists($messengerClassName)) {
-            return new $messengerClassName($this->em);
+            return new $messengerClassName($this->entityManager);
         }
         return null;
     }
