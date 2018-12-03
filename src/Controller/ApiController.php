@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Auth\Auth;
 use App\Service\Message;
 use App\Service\MessageManager;
+use App\Service\MessageQueue;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,16 +88,20 @@ class ApiController extends AbstractController
             );
         }
 
-        /* $queue = new MessageQueue();
-         $messageData = $queue->popCount(MessageQueue::DEFAULT_COUNT);*/
-        $messageData = [
+        $queue = new MessageQueue();
+        $messageData = $queue->popCount(MessageQueue::DEFAULT_COUNT);
+
+        /*
+         *заглушка
+         $messageData = [
             'users' =>
                 [
-                    ['chat_id' => 1, 'messenger_id' => 2, ],
+                    ['chat_id' => 1, 'messenger_id' => 2,],
                     ['chat_id' => 2, 'messenger_id' => 1 ]
                 ],
 
             'message' => 'custom message'];
+         */
 
         $messageManager = new MessageManager($this->entityManager);
         foreach ($messageData['users'] as $oneData) {
